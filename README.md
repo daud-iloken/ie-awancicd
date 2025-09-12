@@ -4,7 +4,7 @@ Ini adalah keterangan ringkas tentang projek anda. Ia boleh jadi sebuah aplikasi
 
 ## 🚀 Ciri-ciri Utama
 
-* Ciri 1: Contohnya, "Aplikasi web yang boleh menguruskan senarai tugas harian."
+* Ciri 1: "Aplikasi web yang boleh menguruskan senarai tugas harian."
 * Ciri 2: "Sistem pengesahan pengguna yang selamat."
 * Ciri 3: "Antaramuka mesra pengguna yang dibangunkan dengan React."
 
