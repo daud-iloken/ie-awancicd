@@ -1,0 +1,43 @@
+version: 0.2
+
+# Tentukan pembolehubah persekitaran
+# Nilai ini biasanya disalurkan oleh AWS CodePipeline atau AWS CodeBuild
+# Ganti tempat letak ini dengan nilai sebenar anda
+env:
+  variables:
+    AWS_REGION: "ap-southeast-1"
+    IMAGE_REPO_NAME: "daud-ie-awancicd-poc-service-repo"
+    IMAGE_TAG: "latest"
+
+phases:
+  install:
+    # Pasang perisian atau pakej yang diperlukan (contohnya, Docker)
+    runtime-versions:
+      docker: 18
+
+  pre_build:
+    commands:
+      # Log masuk ke Amazon ECR
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 992382532377.dkr.ecr.ap-southeast-1.amazonaws.com
+
+  build:
+    commands:
+      # Bina imej Docker
+      - echo "Building the Docker image..."
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG 992382532377.dkr.ecr.ap-southeast-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  
+  post_build:
+    commands:
+      # Muat naik imej yang telah dibina ke Amazon ECR
+      - echo "Pushing the Docker image to Amazon ECR..."
+      - docker push 992382532377.dkr.ecr.ap-southeast-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo "Writing image definitions file..."
+      # Ini mencipta fail JSON yang digunakan oleh AWS CodeDeploy untuk penyebaran
+      - printf '[{"name":"container-name","imageUri":"%s"}]' 992382532377.dkr.ecr.ap-southeast-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
+
+artifacts:
+  files:
+    # Fail yang akan dihantar ke fasa seterusnya (contohnya, AWS CodeDeploy)
+    - imagedefinitions.json
