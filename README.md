@@ -6,7 +6,7 @@ Ini adalah keterangan ringkas tentang projek anda. Ia boleh jadi sebuah aplikasi
 
 * Ciri 1: "Aplikasi web yang boleh menguruskan senarai tugas harian."
 * Ciri 2: "Sistem pengesahan pengguna yang selamat."
-* Ciri 3: "Antaramuka mesra pengguna."
+* Ciri 3: "Antara-muka mesra pengguna."
 
 ## ⚙️ Cara Memasang (Installation)
 
