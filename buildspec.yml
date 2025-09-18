@@ -1,20 +1,21 @@
----
 version: 0.2
+
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login
-        --username AWS --password-stdin
-        $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
   build:
     commands:
       - echo Build started on `date`
+      - ls -l
+      - cat package.json
       - docker build -t $ImageName .
+
   post_build:
     commands:
       - echo Build completed on `date`
-      - docker tag $ImageName:latest
-        $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
+      - docker tag $ImageName:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
 
