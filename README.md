@@ -8,7 +8,7 @@ Ini adalah keterangan ringkas tentang projek anda. Ia boleh jadi sebuah aplikasi
 * Ciri 2: "Sistem pengesahan pengguna yang selamat."
 * Ciri 3: "Antara-muka mesra pengguna."
 
-## ⚙️ Cara Memasang (Installation)
+## ⚙️ Cara Pemasangan (Installation)
 
 Ikut langkah di bawah untuk menjalankan projek ini secara tempatan (locally).
 
