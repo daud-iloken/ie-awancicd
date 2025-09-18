@@ -2,14 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-# Salin file package.json (dan package-lock.json kalau ada)
+# Salin package.json dan package-lock.json dulu
 COPY package*.json ./
 
 # Pasang dependensi
 RUN npm install
 
-# Baru salin semua source code
+# Baru salin semua kod
 COPY . .
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
