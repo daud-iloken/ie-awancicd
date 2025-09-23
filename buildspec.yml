@@ -1,21 +1,49 @@
 version: 0.2
 
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-11-amazon-corretto"
+    NPM_CONFIG_PREFIX: "/usr/local" # Example environment variable
+
 phases:
+  install:
+    runtime-versions:
+      java: corretto11
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+      - npm install # For Node.js projects
+      - echo "Dependencies installed."
+
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo "Running pre-build tasks..."
+      - # Optional: Run unit tests or linting here
+      - mvn clean install # For Maven projects, for example
 
   build:
     commands:
-      - echo Build started on `date`
-      - ls -l
-      - cat package.json
-      - docker build -t $ImageName .
+      - echo "Building the application..."
+      - # Example: Build a Docker image
+      - docker build -t my-app:latest .
+      - # Example: Build a Java application
+      - ./gradlew build --scan
 
   post_build:
     commands:
-      - echo Build completed on `date`
-      - docker tag $ImageName:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
+      - echo "Running post-build tasks..."
+      - # Optional: Push Docker image to ECR
+      - docker push my-app:latest
+      - # Clean up temporary files
+      - rm -rf target/
 
+artifacts:
+  files:
+    - '**/*' # Include all files in the build output
+  base-directory: 'build/libs' # Specify the base directory for artifacts
+  discard-paths: no # Keep the directory structure in the artifact
+
+cache:
+  paths:
+    - '/root/.m2/repository/**/*' # Cache Maven dependencies
+    - '/root/.gradle/caches/**/*' # Cache Gradle caches
