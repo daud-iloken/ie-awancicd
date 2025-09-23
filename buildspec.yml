@@ -1,5 +1,11 @@
 version: "0.2"
 
+env:
+  variables:
+    ImageName: ie-awancicd
+    AWS_DEFAULT_REGION: ap-southeast-1
+    AWS_ACCOUNT_ID: 992382532377
+
 phases:
   pre_build:
     commands:
@@ -10,11 +16,13 @@ phases:
     commands:
       - echo Build started on `date`
       - ls -l
-      - cat package.json
-      - docker build -t $ImageName .
+      - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - docker build -t $ImageName:latest -t $ImageName:$IMAGE_TAG .
 
   post_build:
     commands:
       - echo Build completed on `date`
       - docker tag $ImageName:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/$ImageName:$IMAGE_TAG
+
