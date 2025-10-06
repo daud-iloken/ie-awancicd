@@ -8,7 +8,7 @@
     "dev": "nodemon index.js"
   },
   "author": "Daud Basir",
-  "license": "MIT",
+  "license": "Iloken Elitery",
   "dependencies": {
     "express": "^4.18.2"
   }
